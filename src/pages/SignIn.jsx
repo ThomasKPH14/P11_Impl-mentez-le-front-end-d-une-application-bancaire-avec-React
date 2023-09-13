@@ -1,16 +1,47 @@
-// Importation des dépendances nécessaires.
-import React from 'react';
-// import { useNavigate } from 'react-router-dom'; // useHistory permet de naviguer entre les pages.
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // useNavigate permet de naviguer entre les pages.
+
+// Importe les hooks useDispatch et useSelector depuis la bibliothèque react-redux.
+// useDispatch envoie les actions, va modifier l'état du store.
+// useSelector extrait les données depuis le store.
+import { useDispatch, useSelector } from 'react-redux';
+
+// Importe l'action asynchrone "login" depuis le fichier authSlice
+import { login } from '../slices/authSlice';
 
 const SignIn = () => {
-    // const history = useNavigate();
+    const dispatch = useDispatch();
+    
+    // Utilise le hook useSelector pour accéder à la partie "isLoggedIn" du store Redux, state.auth.isLoggedIn renvoie la valeur de la propriété isLoggedIn.
+    const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+    const loginError = useSelector(state => state.auth.loginError);
 
-    // const handleSignIn = () => {
-    //     // Logique d'authentification (si nécessaire)
+    // Redirection vers la page spécifique
+    const navigate = useNavigate();
 
-    //     // Rediriger vers la page /user
-    //     history.push('/user');
-    // };
+    // Initialise une nouvelle variable d'état "username" et la fonction "setUsername" pour la mettre à jour.
+    // La valeur initiale de "username" est une chaîne vide.
+    const [username, setUsername] = useState('');
+    // Pareil que pour "username" mais concernant le password
+    const [password, setPassword] = useState('');
+
+    // Ecoute le changement isLoggedIn et redirige l'utilisateur vers son compte
+    useEffect(() => {
+        if (isLoggedIn) {
+          navigate('/user/:id');
+        }
+      }, [isLoggedIn, navigate]);
+
+    // Définit la fonction handleSignIn qui sera exécutée lors du clic sur le bouton
+    const handleSignIn = async (event) => {
+        event.preventDefault();
+        try {
+            await dispatch(login({ username, password }));
+          } catch (error) {
+            // Afficher l'erreur si la connexion échoue
+            console.error("Login failed:", error.message);
+          }
+    };
 
     return (
         <main className="main bg-dark">
@@ -20,23 +51,19 @@ const SignIn = () => {
                 <form>
                     <div className="input-wrapper">
                         <label htmlFor="username">Username</label>
-                        <input type="text" id="username" />
+                        <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} />
                     </div>
                     <div className="input-wrapper">
                         <label htmlFor="password">Password</label>
-                        <input type="password" id="password" />
+                        <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                     </div>
                     <div className="input-remember">
                         <input type="checkbox" id="remember-me" />
                         <label htmlFor="remember-me">Remember me</label>
                     </div>
-                    <button
-                        // onClick={handleSignIn} 
-                        className="sign-in-button"
-                    >
-                        Sign In
-                    </button>
+                    <button onClick={handleSignIn} className="sign-in-button">Sign In</button>
                 </form>
+                {loginError && <p className="error-message">{loginError}</p>}
             </section>
         </main>
     );

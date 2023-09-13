@@ -1,4 +1,3 @@
-// Importation React
 import React from 'react';
 
 // Importation du fichier JSON qui récupère les informations de la page d'accueil

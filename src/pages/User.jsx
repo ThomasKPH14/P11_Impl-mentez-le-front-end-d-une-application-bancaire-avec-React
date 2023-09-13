@@ -1,10 +1,8 @@
-// Importation des dépendances nécessaires.
 import React from 'react';
 
 // Importation du composant Account.
 import Account from '../components/Account';
 
-// Déclaration du composant Home
 const User = () => {
 
     return (

@@ -1,4 +1,3 @@
-// Importation des dépendances nécessaires.
 import React from 'react';
 
 // Importation du composant Features.

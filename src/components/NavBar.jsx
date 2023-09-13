@@ -1,4 +1,3 @@
-// Importation des bibliothèques et des composants nécessaires
 import React from 'react';
 import { NavLink } from 'react-router-dom'; 
 import Logo from '../assets/argentBankLogo.png'; // Importation du logo

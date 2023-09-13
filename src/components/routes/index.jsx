@@ -1,4 +1,3 @@
-// Import des packages nécessaires depuis la bibliothèque react-router-dom
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
@@ -20,12 +19,11 @@ const AppRouter = () => {
         {/* Définition des différentes routes et des composants à rendre pour chaque URL */}
         <Route path="/" element={<Index />} /> {/* Route de la page d'accueil */}
         <Route path="/sign-in" element={<SignIn />} /> {/* Page affichant la connexion au compte */}
-        <Route path="/user" element={<User />} /> {/* Page de l'utilisateur*/}
+        <Route path="/user/:id" element={<User />} /> {/* Page de l'utilisateur*/}
       </Routes>
       <Footer /> {/* Affiche le composant Footer au bas de chaque page */}
     </Router>
   );
 };
 
-// Exportation du composant AppRouter pour utilisation dans d'autres fichiers
 export default AppRouter;
