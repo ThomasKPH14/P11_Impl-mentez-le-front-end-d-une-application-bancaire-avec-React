@@ -5,7 +5,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 // Créer une action asynchrone pour la connexion de l'utilisateur
 export const userLogin = createAsyncThunk('auth/login', async (credentials) => {
-  const response = await fetch("localhost:3001/api/v1", {
+  const response = await fetch("http://localhost:3001/api/v1/user/login", {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -14,9 +14,13 @@ export const userLogin = createAsyncThunk('auth/login', async (credentials) => {
   });
 
   const data = await response.json();
+  console.log('Server Response:', data);
+
 
   if (!response.ok) {
-    throw new Error(data.message || 'Could not login.');
+    const errorData = await response.json();
+    console.log("Server Error Response:", errorData);
+    throw new Error(errorData.message || 'Could not login.');
   }
   
   return data;

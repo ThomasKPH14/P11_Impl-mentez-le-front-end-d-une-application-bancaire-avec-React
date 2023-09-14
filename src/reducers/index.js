@@ -10,6 +10,7 @@ import authReducer from '../slices/authSlice';
 // La clé `auth` est utilisée pour accéder à la partie de l'état gérée par `authReducer`.
 const rootReducer = combineReducers({
   auth: authReducer,
+  devTools: true,
 });
 
 // Exporte le `rootReducer` pour qu'il puisse être utilisé dans le store Redux.
