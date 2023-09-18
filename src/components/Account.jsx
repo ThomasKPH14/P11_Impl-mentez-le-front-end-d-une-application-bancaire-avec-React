@@ -1,5 +1,6 @@
 import React from 'react';
 
+import ArrowTransaction from '../assets/arrow_right.png';
 // Importation du fichier JSON qui récupère les informations du compte
 import AccountData from "../app/account.json"
 
@@ -15,7 +16,9 @@ function Account() {
                             <p className="account-amount-description">{description}</p>
                         </div>
                         <div className="account-content-wrapper cta">
-                            <button className="transaction-button">View transactions</button>
+                            <button className="transaction-button">
+                                <img src={ArrowTransaction} alt="Arrow transaction" />
+                            </button>
                         </div>
                     </section>
                 </React.Fragment>

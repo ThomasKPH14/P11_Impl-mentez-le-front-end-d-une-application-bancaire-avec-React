@@ -1,69 +1,141 @@
-// Importation de createSlice depuis Redux Toolkit
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 
-// Un payload est une donnée que j'envoie avec une action. 
-
-// Créer une action asynchrone pour la connexion de l'utilisateur
+// Action asynchrone pour la connexion de l'utilisateur.
 export const userLogin = createAsyncThunk('auth/login', async (credentials) => {
-  const response = await fetch("http://localhost:3001/api/v1/user/login", {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(credentials)
-  });
+  try {
+    // Requête POST pour la connexion en utilisant axios
+    const response = await axios.post(
+      "http://localhost:3001/api/v1/user/login",
+      { email: credentials.email, password: credentials.password }
+    );
 
-  const data = await response.json();
-  console.log('Server Response:', data);
+    // Récupération du token depuis la réponse du serveur
+    const token = response.data.body.token;
 
+    // Utiliser le token pour une nouvelle requête POST pour avoir les informations de l'utilisateur
+    const profile = await axios.post(
+      "http://localhost:3001/api/v1/user/profile",
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    console.log("Server Error Response:", errorData);
-    throw new Error(errorData.message || 'Could not login.');
+    // Retourne le token et les informations du profil
+    return {
+      token,
+      ...profile.data.body,
+    };
+  } catch (e) {
+    throw new Error(e?.response?.data?.message || 'Server connection error');
   }
-  
-  return data;
 });
 
-// État initial pour ce slice de l'application
+// Action asynchrone pour la modification de l'utilisateur.
+export const updateUserUsername = createAsyncThunk('auth/updateUsername', async ({ username, token }) => {
+  try {
+    // Requête PUT pour la modification.
+    const response = await axios.put(
+      "http://localhost:3001/api/v1/user/profile",
+      { userName: username },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    
+    if (response.status !== 200) {
+      throw new Error('Failed to update username');
+    }
+
+    return username;
+  } catch (e) {
+    throw new Error(e?.response?.data?.message || 'Server connection error');
+  }
+});
+
+
+// État initial
 const initialState = {
-  isLoggedIn: false, // Indique si l'utilisateur est connecté ou non
-  user: null,         // Stocke les informations de l'utilisateur connecté
-  loginError: null,   
+  isLoading: false,     // Ajout pour l'état de chargement
+  isLoggedIn: false,
+  email: null,
+  firstName: null,
+  lastName: null,
+  user: null,
+  loginError: null,
+  token: null,
 };
 
-// Création du slice pour la gestion de l'authentification
+// Création du slice
 const authSlice = createSlice({
-  name: 'auth',          // Nom du slice
-  initialState,          // État initial
+  name: 'auth',
+  initialState,
   reducers: {
     // Action pour se connecter
     login(state, action) {
       state.isLoggedIn = true;           // Met à jour l'état pour indiquer que l'utilisateur est connecté
       state.user = action.payload;       // Stocke les informations de l'utilisateur
     },
+    loginSuccess(state, action) {
+      state.firstName = action.payload;
+      state.lastName = action.payload;
+    },
     // Action pour se déconnecter
     logout(state) {
       state.isLoggedIn = false;          // Met à jour l'état pour indiquer que l'utilisateur est déconnecté
       state.user = null;                 // Efface les informations de l'utilisateur
+      state.token = null;                // Assure de réinitialiser le token lors de la déconnexion
     },
   },
   extraReducers: (builder) => {
     builder
+    .addCase(userLogin.pending, (state) => {            // Ajout pour l'état du chargement
+      state.isLoading = true;
+    })
       .addCase(userLogin.fulfilled, (state, action) => {
-        state.isLoggedIn = true;
+        state.isLoading = false;                        // Ajout pour l'état du chargement
+        state.isLoggedIn = true;                        // Met à jour l'état pour indiquer que l'utilisateur est connecté
+        state.token = action.payload.token;             // Les parties payload stocke dans l'état Redux
         state.user = action.payload;
-        state.loginError = null;  // Réinitialisez l'erreur lors d'une connexion réussie
+        state.email = action.payload.email;
+        state.firstName = action.payload.firstName;
+        state.lastName = action.payload.lastName;
+        state.loginError = null;                        // Réinitialise l'erreur de connexion en la mettant à null
+
+        // Enregistrement dans localStorage
+        localStorage.setItem('user', JSON.stringify(action.payload));
+        localStorage.setItem('isLoggedIn', 'true');
       })
       .addCase(userLogin.rejected, (state, action) => {
-        state.loginError = "Les identifiants de connexion sont incorrects ou vous n'êtes pas encore inscrit.";
+        state.isLoading = false;                        // Ajout pour l'état du chargement
+        state.loginError = action.error.message;
+
+        // Suppression du localStorage
+        localStorage.removeItem('user');
+        localStorage.removeItem('isLoggedIn');
+      })
+      // ExtraReducers pour l'update
+      .addCase(updateUserUsername.fulfilled, (state, action) => {
+        state.user.userName = action.payload;
+        state.loginError = null;
+
+        // Mise à jour du localStorage
+        const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+        currentUser.userName = action.payload;
+        localStorage.setItem('user', JSON.stringify(currentUser));
+      })
+      .addCase(updateUserUsername.rejected, (state, action) => {
+        state.loginError = action.error.message;
       });
   }
 });
 
-// Exporte les actions générées automatiquement pour ce slice
-export const { login, logout } = authSlice.actions;
-
-// Exporte le reducer pour l'utiliser dans le store Redux
+// Exporte les actions et le reducer
+export const { login, loginSuccess, logout } = authSlice.actions;
+// erreur a corriger export { updateUserUsername } ;
 export default authSlice.reducer;

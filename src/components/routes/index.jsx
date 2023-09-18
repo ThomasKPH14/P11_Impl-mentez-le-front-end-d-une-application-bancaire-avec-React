@@ -18,8 +18,8 @@ const AppRouter = () => {
       <Routes>
         {/* Définition des différentes routes et des composants à rendre pour chaque URL */}
         <Route path="/" element={<Index />} /> {/* Route de la page d'accueil */}
-        <Route path="/sign-in" element={<SignIn />} /> {/* Page affichant la connexion au compte */}
-        <Route path="/user/:id" element={<User />} /> {/* Page de l'utilisateur*/}
+        <Route path="/login" element={<SignIn />} /> {/* Page affichant la connexion au compte */}
+        <Route path="/profile" element={<User />} /> {/* Page de l'utilisateur*/}
       </Routes>
       <Footer /> {/* Affiche le composant Footer au bas de chaque page */}
     </Router>

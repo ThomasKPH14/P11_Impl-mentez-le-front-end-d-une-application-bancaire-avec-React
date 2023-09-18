@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // useNavigate permet de naviguer entre les pages.
 
+import IconUser from '../assets/icon-user.png';
+
 // Importe les hooks useDispatch et useSelector depuis la bibliothèque react-redux.
 // useDispatch envoie les actions, va modifier l'état du store.
 // useSelector extrait les données depuis le store.
@@ -29,9 +31,8 @@ const SignIn = () => {
     
     // Ecoute le changement isLoggedIn et redirige l'utilisateur vers son compte
     useEffect(() => {
-        if (isLoggedIn && user) {
-            const userId = user.id;// récupérez l'ID de l'utilisateur depuis le state Redux ou autre
-            navigate(`/user/${userId}`);
+        if (isLoggedIn && user ) {
+            navigate(`/profile`);
         }
       }, [isLoggedIn, navigate, user]);
 
@@ -49,7 +50,7 @@ const SignIn = () => {
     return (
         <main className="main bg-dark">
             <section className="sign-in-content">
-                <i className="fa fa-user-circle sign-in-icon"></i>
+                <img src={IconUser} className="sign-in-icon" />
                 <h1>Sign In</h1>
                 <form>
                     <div className="input-wrapper">
