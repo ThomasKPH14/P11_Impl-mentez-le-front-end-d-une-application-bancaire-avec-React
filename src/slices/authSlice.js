@@ -47,7 +47,7 @@ export const updateUserUsername = createAsyncThunk('auth/updateUsername', async 
         },
       }
     );
-    
+
     if (response.status !== 200) {
       throw new Error('Failed to update username');
     }
@@ -57,6 +57,28 @@ export const updateUserUsername = createAsyncThunk('auth/updateUsername', async 
     throw new Error(e?.response?.data?.message || 'Server connection error');
   }
 });
+
+// Action asynchrone pour récupérer les transactions de l'utilisateur
+export const getTransactions = createAsyncThunk('auth/getTransactions', async ({ token }) => {
+  try {
+    // Requête GET pour récupérer les transactions
+    const response = await axios.get("http://localhost:3001/api/v1/user/profile/transaction", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.status !== 200) {
+      throw new Error('Failed to fetch transactions');
+    }
+
+    // Retourne les transactions
+    return response.data;
+  } catch (e) {
+    throw new Error(e?.response?.data?.message || 'Server connection error');
+  }
+});
+
 
 
 // État initial
@@ -69,6 +91,7 @@ const initialState = {
   user: null,
   loginError: null,
   token: null,
+  transactions: [],
 };
 
 // Création du slice
@@ -90,13 +113,15 @@ const authSlice = createSlice({
       state.isLoggedIn = false;          // Met à jour l'état pour indiquer que l'utilisateur est déconnecté
       state.user = null;                 // Efface les informations de l'utilisateur
       state.token = null;                // Assure de réinitialiser le token lors de la déconnexion
+      localStorage.removeItem('user');
+      localStorage.removeItem('isLoggedIn');
     },
   },
   extraReducers: (builder) => {
     builder
-    .addCase(userLogin.pending, (state) => {            // Ajout pour l'état du chargement
-      state.isLoading = true;
-    })
+      .addCase(userLogin.pending, (state) => {            // Ajout pour l'état du chargement
+        state.isLoading = true;
+      })
       .addCase(userLogin.fulfilled, (state, action) => {
         state.isLoading = false;                        // Ajout pour l'état du chargement
         state.isLoggedIn = true;                        // Met à jour l'état pour indiquer que l'utilisateur est connecté
@@ -131,11 +156,21 @@ const authSlice = createSlice({
       })
       .addCase(updateUserUsername.rejected, (state, action) => {
         state.loginError = action.error.message;
+      })
+      .addCase(getTransactions.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getTransactions.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.transactions = action.payload;
+      })
+      .addCase(getTransactions.rejected, (state, action) => {
+        state.isLoading = false;
+        state.loginError = action.error.message;
       });
   }
 });
 
 // Exporte les actions et le reducer
-export const { login, loginSuccess, logout } = authSlice.actions;
-// erreur a corriger export { updateUserUsername } ;
+export const { login, loginSuccess, logout, updateTransactionCategory, updateTransactionNote } = authSlice.actions;
 export default authSlice.reducer;

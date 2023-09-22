@@ -70,6 +70,17 @@ body {
   margin: 0 1rem;
 }
 
+@media (max-width: 1022px) {
+  .main-nav-item-icon {
+    width: 25px;
+    margin: 0 0.1rem;
+  }
+
+  .main-nav-item-container {
+    margin-left: 1rem;
+  }
+}
+
 .main-nav-item:hover {
   text-decoration: underline;
 }
@@ -96,7 +107,7 @@ body {
 
 
 .hero {
-  background-image: url('./assets/bank-tree.jpeg');
+  background-image: url('./assets/bank-tree.webp');
   background-position: 0 -50px;
   background-size: cover;
   background-repeat: no-repeat;
@@ -286,6 +297,15 @@ body {
   margin-bottom: 2rem;
   color: #fff;
 }
+@media (max-width: 1022px) {
+  .account {
+    flex-direction: row;
+  }
+
+  .account-content-wrapper.cta {
+    text-align: end;
+  }
+}
 
 .account-amount {
   margin: 0;
@@ -334,18 +354,145 @@ body {
 .transaction-button {
   border: none;
   background-color: transparent;
-  /* display: block;
-  width: 100%;
-  padding: 8px;
-  font-size: 1.1rem;
-  font-weight: bold;
-  margin-top: 1rem;
-  border-color: #00bc77;
-  background-color: #00bc77;
-  color: #fff; */
 }
 .transaction-button img {
   width: 35px;
+}
+
+img.cross-transaction {
+  width: 58px;
+}
+
+.transaction-table {
+  width: 80%;
+  margin: auto;
+}
+
+.transaction-table-header {
+  padding: 8px 10px;
+}
+
+.transaction-table-header :nth-child(1) {
+  width: 10%;
+  text-align: left;
+  padding-left: 2%;
+}
+
+.transaction-table-header :nth-child(3),
+.transaction-row :nth-child(3) {
+  width: 7%;
+}
+.transaction-table-header :nth-child(4),
+.transaction-row :nth-child(4) {
+  width: 21%;
+}
+
+.transaction-table-header :nth-child(5),
+.transaction-row :nth-child(5) {
+  width: 22px;
+}
+
+.transaction-table-header :nth-child(2) {
+  text-align: left;
+  flex: 2 1 auto;
+  padding-left: 18%;
+}
+
+.transaction-row :nth-child(2) {
+  text-align: left;
+  flex: 2 1 auto;
+  padding-left: 15%;
+}
+
+.transaction-table-header,
+.transaction-row,
+.transaction-table-subcategory {
+  display: flex;
+}
+
+.transaction-row-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: #61B37B;
+  color: #fff;
+  font-size: 15px;
+  border: none;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.transaction-row {
+  align-items: center;
+}
+
+.transaction-row img {
+  width: 22px;
+}
+
+.transaction-row, .transaction-subtable {
+  width: 100%;
+}
+
+.transaction-subtable {
+  text-align: center;
+}
+
+.transaction-table-subcategory-edit {
+  width: 20%;
+}
+
+.transaction-table-subcategory :nth-child(2) {
+  width: 40%;
+  text-align: left;
+  padding-left: 15%;
+}
+
+.transaction-row-title,
+.transaction-table-subcategory-title {
+  width: 10%;
+  text-align: left;
+  padding-left: 1%;
+}
+
+.transaction-table-subcategory select, 
+.transaction-table-subcategory input {
+  border: none;
+  appearance: none;
+  background: transparent;
+  font-size: 15px;
+  color: #fff;
+  padding: 0;
+  min-width: min-content;
+}
+
+.transaction-table-subcategory select option {
+  color: black;
+}
+
+.transaction-table-subcategory .fa {
+  padding-left: 0;
+}
+
+@media (max-width: 1022px) {
+  .transaction-table {
+    overflow-x: auto;
+  }
+  .transaction-table-header,
+  .transaction-row,
+  .transaction-table-subcategory {
+    width: 500px;
+  }
+  .transaction-row-container {
+    width: 500px;
+  }
+  .transaction-table-header :nth-child(2),
+  .transaction-row :nth-child(2),
+  .transaction-table-subcategory :nth-child(2) {
+    flex: 0.7 1 auto;
+  }
 }
 
 @media (min-width: 720px) {
@@ -356,8 +503,4 @@ body {
   .account-content-wrapper.cta {
     flex: 0;
   }
-
-  /* .transaction-button {
-    width: 200px;
-  } */
 }

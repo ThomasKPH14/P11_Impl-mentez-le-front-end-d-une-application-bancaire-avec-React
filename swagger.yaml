@@ -101,6 +101,131 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
+  /user/profile/transaction:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: Create a new transaction
+      description: API for creating a new transaction
+      parameters:
+        - in: body
+          name: body
+          description: Transaction Payload
+          required: true
+          schema:
+            $ref: '#/definitions/Transaction'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction created successfully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: Get all transactions for a user
+      description: API for fetching all transactions for a user
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transactions fetched successfully
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Transaction'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error 
+  /user/profile/transaction/{transactionId}:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: Get a specific transaction by its ID
+      description: API for fetching a specific transaction for a user
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          description: The ID of the transaction to fetch
+          type: string
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction fetched successfully
+          schema:
+            $ref: '#/definitions/Transaction'
+        '404':
+          description: Transaction not found
+        '500':
+          description: Internal Server Error 
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: Update a specific transaction by its ID
+      description: API for updating a specific transaction
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          description: The ID of the transaction to update
+          type: string
+        - in: body
+          name: body
+          description: Updated Transaction Payload
+          required: true
+          schema:
+            $ref: '#/definitions/Transaction'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction updated successfully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error 
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: Delete a specific transaction by its ID
+      description: API for deleting a specific transaction
+      parameters:
+        - name: transactionId
+          in: path
+          required: true
+          description: The ID of the transaction to delete
+          type: string
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction deleted successfully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '404':
+          description: Transaction not found
+        '500':
+          description: Internal Server Error        
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -156,3 +281,27 @@ definitions:
     properties:
       userName:
         type: string
+  Transaction:
+    properties:
+      date:
+        type: string
+        format: date-time
+        description: Transaction date in ISO string format
+      description:
+        type: string
+        description: Description of the transaction
+      amount:
+        type: string
+        description: Amount of the transaction in dollars
+      balance:
+        type: string
+        description: Account balance in dollars after the transaction
+      transactionType:
+        type: string
+        description: Type of transaction
+      category:
+        type: string
+        description: Transaction category
+      note:
+        type: string
+        description: Additional notes for the transaction
