@@ -13,7 +13,7 @@ import rootReducer from "./reducers";
 
 // Configuration du store Redux
 const store = configureStore({
-    reducer: rootReducer,
+  reducer: rootReducer,
 });
 
 // Le store Redux est passé via le Provider à l'ensemble de l'application

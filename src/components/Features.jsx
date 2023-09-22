@@ -18,8 +18,8 @@ function Features() {
                     </React.Fragment>
                 ))}
             </>
-
         </section>
     )
 }
+
 export default Features;

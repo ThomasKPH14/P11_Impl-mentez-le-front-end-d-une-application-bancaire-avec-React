@@ -30,7 +30,7 @@ function EditUsername() {
     if (user?.firstName && user?.lastName) {                // Ajout de cette partie pour conserver firstname et lastname malgrès l'actualisation
       setFirstName(user.firstName);
       setLastName(user.lastName);
-      
+
       localStorage.setItem('firstName', user.firstName);
       localStorage.setItem('lastName', user.lastName);
     }
@@ -49,7 +49,6 @@ function EditUsername() {
           <button className="edit-button" onClick={() => setIsEditing(true)}>Edit Name</button>
         </>
       )}
-      
       {isEditing && (
         <>
           <h2>Edit user info</h2>

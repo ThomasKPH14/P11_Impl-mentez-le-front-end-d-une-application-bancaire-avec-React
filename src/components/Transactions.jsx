@@ -75,7 +75,6 @@ function Transactions() {
                   <div className='transaction-table-subcategory-title'>Note</div>
                   <div>
                     <input type="text" onChange={(e) => handleNoteChange(index, e.target.value)} placeholder='lorem ipsum' />
-                    
                     <i className="fa fa-pencil" aria-hidden="true"></i>
                   </div>
                 </div>

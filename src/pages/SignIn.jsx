@@ -13,7 +13,7 @@ import { userLogin } from '../slices/authSlice';
 
 const SignIn = () => {
     const dispatch = useDispatch();
-    
+
     // Utilise le hook useSelector pour accéder à la partie "isLoggedIn" du store Redux, state.auth.isLoggedIn renvoie la valeur de la propriété isLoggedIn.
     const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
     const loginError = useSelector(state => state.auth.loginError);
@@ -28,29 +28,29 @@ const SignIn = () => {
     const [password, setPassword] = useState('');
 
     const user = useSelector(state => state.auth.user);
-    
+
     // Ecoute le changement isLoggedIn et redirige l'utilisateur vers son compte
     useEffect(() => {
-        if (isLoggedIn && user ) {
+        if (isLoggedIn && user) {
             navigate(`/profile`);
         }
-      }, [isLoggedIn, navigate, user]);
+    }, [isLoggedIn, navigate, user]);
 
     // Définit la fonction handleSignIn qui sera exécutée lors du clic sur le bouton
     const handleSignIn = async (event) => {
         event.preventDefault();
         try {
             await dispatch(userLogin({ email, password }));
-          } catch (error) {
+        } catch (error) {
             // Afficher l'erreur si la connexion échoue
             console.error("Login failed:", error.message);
-          }
+        }
     };
 
     return (
         <main className="main bg-dark">
             <section className="sign-in-content">
-                <img src={IconUser} className="sign-in-icon" />
+                <img src={IconUser} className="sign-in-icon" alt='user icon' />
                 <h1>Sign In</h1>
                 <form>
                     <div className="input-wrapper">
@@ -72,4 +72,5 @@ const SignIn = () => {
         </main>
     );
 };
+
 export default SignIn;

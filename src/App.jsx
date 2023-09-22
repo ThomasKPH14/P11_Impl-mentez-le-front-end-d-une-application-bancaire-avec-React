@@ -11,14 +11,12 @@ function App() {
     // Charger les données de l'utilisateur depuis localStorage
     const storedUser = localStorage.getItem('user');
     const isLoggedIn = localStorage.getItem('isLoggedIn');
-    
-    
+
+
     if (storedUser && isLoggedIn === 'true') {
       dispatch(login(JSON.parse(storedUser)));
-      console.log("Inside useEffect");
       console.log("Stored User:", storedUser);
       console.log("Is Logged In:", isLoggedIn);
-      console.log("Dispatched login");
     }
   }, [dispatch]);
 
