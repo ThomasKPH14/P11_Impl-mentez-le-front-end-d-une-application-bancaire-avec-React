@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Routes from './components/routes/index';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from './slices/authSlice';  // Assurez-vous d'importer la bonne action
+import { login } from './slices/authSlice';
 
 function App() {
   const dispatch = useDispatch();
@@ -11,7 +11,6 @@ function App() {
     // Charger les données de l'utilisateur depuis localStorage
     const storedUser = localStorage.getItem('user');
     const isLoggedIn = localStorage.getItem('isLoggedIn');
-
 
     if (storedUser && isLoggedIn === 'true') {
       dispatch(login(JSON.parse(storedUser)));
